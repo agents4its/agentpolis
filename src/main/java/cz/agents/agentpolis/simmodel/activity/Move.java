@@ -30,15 +30,23 @@ public class Move<A extends Agent & MovingAgent> extends TimeConsumingActivity<A
     protected final Edge edge;
     protected final Node from;
     protected final Node to;
+    
+    private long duration;
 
 
     public Move(ActivityInitializer activityInitializer,
                 TypedSimulation eventProcessor, A agent, Edge edge, Node from, Node to) {
+        this(activityInitializer, eventProcessor, agent, edge, from, to, 0);
+    }
+    
+    public Move(ActivityInitializer activityInitializer, TypedSimulation eventProcessor, A agent, Edge edge, 
+            Node from, Node to, long duration) {
         super(activityInitializer, agent);
         this.eventProcessor = eventProcessor;
         this.edge = edge;
         this.from = from;
         this.to = to;
+        this.duration = duration;
     }
 
 
@@ -62,12 +70,13 @@ public class Move<A extends Agent & MovingAgent> extends TimeConsumingActivity<A
 
     @Override
     protected long performPreDelayActions() {
-        long duration = 0;
         if (checkFeasibility(edge)) {
 
             agent.setTargetNode(to);
-
-            duration = MoveUtil.computeDuration(agent.getVelocity(), edge.length);
+            
+            if(duration == 0){
+                duration = MoveUtil.computeDuration(agent.getVelocity(), edge.length);
+            }
 
             agent.setDelayData(new DelayData(duration, eventProcessor.getCurrentTime()));
         } else {

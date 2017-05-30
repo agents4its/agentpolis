@@ -27,7 +27,11 @@ public class VehicleMove<A extends Agent & Driver> extends Move<A> {
     public VehicleMove(ActivityInitializer activityInitializer,
                        TypedSimulation eventProcessor, A agent, Edge edge, Node from, Node to) {
         super(activityInitializer, eventProcessor, agent, edge, from, to);
-
+    }
+    
+    public VehicleMove(ActivityInitializer activityInitializer,
+                       TypedSimulation eventProcessor, A agent, Edge edge, Node from, Node to, long duration) {
+        super(activityInitializer, eventProcessor, agent, edge, from, to, duration);
     }
 
     @Override

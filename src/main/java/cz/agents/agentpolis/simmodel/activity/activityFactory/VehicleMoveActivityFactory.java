@@ -33,4 +33,8 @@ public class VehicleMoveActivityFactory extends ActivityFactory {
         return new VehicleMove<>(activityInitializer,
                 eventProcessor, agent, edge, from, to);
     }
+    
+    public <AG extends Agent & Driver> Move<AG> create(AG agent, Edge edge, Node from, Node to, long duration) {
+        return new VehicleMove<>(activityInitializer, eventProcessor, agent, edge, from, to, duration);
+    }
 }
