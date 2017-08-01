@@ -31,11 +31,11 @@ public class Crossroad extends Connection {
 
     private final Map<Lane, Link> outputLinksMappedByInputLanes;
     private final Map<Connection, Link> outputLinksMappedByNextConnections;
-    
+
     private final double maxFlowPerLane;
-    
+
     private final int simultaneouslyDrivingLanes;
-    
+
 
     public Crossroad(Config config, SimulationProvider simulationProvider, CongestionModel congestionModel,
                      SimulationNode node) {
@@ -74,17 +74,17 @@ public class Crossroad extends Connection {
                 readyLanes.add(inputLane);
             }
         }
-        
+
         // until the traffic flow per tick is not depleted
         while (metersTransferedThisTick < transferredVehicleMetersPerTick) {
-            
+
             // if there are no waiting vehicles
             if (readyLanes.isEmpty()) {
                 // not sending tick event - performance reasons, the crossroad is woken up when a vehicle arrives
                 awake = false;
                 return;
             }
-            
+
             Lane chosenLane = null;
 
             if (readyLanes.size() == 1) {
@@ -95,7 +95,7 @@ public class Crossroad extends Connection {
                 } while (!chosenLane.hasWaitingVehicles());
             }
             boolean laneDepleted = tryToServeLane(chosenLane);
-            
+
             if (laneDepleted) {
                 readyLanes.remove(chosenLane);
             }
@@ -158,6 +158,9 @@ public class Crossroad extends Connection {
             }
         }
         metersTransferedThisBatch = 0;
+        if (!chosenLane.hasWaitingVehicles()) {
+            return true;
+        }
         return false;
     }
 
