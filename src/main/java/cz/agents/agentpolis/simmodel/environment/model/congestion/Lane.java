@@ -167,7 +167,7 @@ public class Lane {
         double capacity = edge.getLanesCount() * edge.length;
         double level = currentlyUsedCapacityInMeters / capacity;
 
-        double speed = freeFlowVelocity * interpolateSquared(1, 0.1, 1 - level);
+        double speed = freeFlowVelocity * (0.1 + 0.9*smoothstep2(0, 1, 1-level));
         double distance = congestionModel.positionUtil.getDistance(
                 vehicle.getPrecisePosition(), congestionModel.graph.getNode(edge.toId))
                 - vehicle.getQueueBeforeVehicleLength();
@@ -182,6 +182,13 @@ public class Lane {
         if (y < Math.min(from, to) || y > Math.max(from, to))
             Log.error(this, y + ": value out of range (" + from + "," + to + ")!");
         return y;
+    }
+
+    private double smoothstep2(double from,double to, double x){
+        // Scale, bias and saturate x to 0..1 range
+        x = Math.min(Math.max((x - from) / (to - from), 0.0), 1.0);
+        // Evaluate polynomial
+        return x * x * x * (x * (x * 6 - 15) + 10);
     }
 
     private void updateVehiclesInQueue(double transferredVehicleLength) {
