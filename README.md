@@ -1,5 +1,5 @@
 # Important!
-This repositorz=y is out of date. Current Agentpolis version is at https://github.com/aicenter/agentpolis.
+This repository is out of date. Current Agentpolis version is at https://github.com/aicenter/agentpolis.
 
 # AgentPolis
 
